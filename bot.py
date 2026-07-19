@@ -24,3 +24,6 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+async def main():
+    print("🤖 Cinema Box started successfully!")
+    await dp.start_polling(bot)
