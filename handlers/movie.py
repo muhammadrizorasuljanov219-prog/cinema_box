@@ -2,11 +2,15 @@ from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 
-from states.movie_state import AddMovie
+from states.movie_state import AddMovie, DeleteMovie
 from database.db import add_movie as save_movie
+from database.db import get_movie, delete_movie
 
 router = Router()
 
+# =======================
+# KINO QO'SHISH
+# =======================
 
 @router.message(F.text == "➕ Кино қўшиш")
 async def add_movie_handler(message: Message, state: FSMContext):
@@ -64,4 +68,28 @@ async def get_video(message: Message, state: FSMContext):
     )
 
     await message.answer("✅ Кино муваффақиятли сақланди!")
+    await state.clear()
+
+
+# =======================
+# KINO O'CHIRISH
+# =======================
+
+@router.message(F.text == "🗑 Кино ўчириш")
+async def delete_movie_start(message: Message, state: FSMContext):
+    await message.answer("🗑 Ўчириладиган кино кодини киритинг:")
+    await state.set_state(DeleteMovie.code)
+
+
+@router.message(DeleteMovie.code)
+async def delete_movie_finish(message: Message, state: FSMContext):
+    movie = get_movie(message.text)
+
+    if movie is None:
+        await message.answer("❌ Бу код бўйича кино топилмади.")
+        return
+
+    delete_movie(message.text)
+
+    await message.answer("✅ Кино муваффақиятли ўчирилди.")
     await state.clear()

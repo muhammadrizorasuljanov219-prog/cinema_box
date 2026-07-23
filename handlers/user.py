@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message
 
 from database.db import get_movie
+from aiogram.filters import StateFilter
 
 router = Router()
 
@@ -18,3 +19,8 @@ async def send_movie(message: Message):
         )
     else:
         await message.answer("❌ Бу код бўйича кино топилмади.")
+
+
+@router.message(StateFilter(None), F.text)
+async def send_movie(message: Message):
+    ...
