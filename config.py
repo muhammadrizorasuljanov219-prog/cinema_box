@@ -8,3 +8,5 @@ ADMIN_ID = int(os.getenv("ADMIN_ID", "8003780362"))
 
 print("Current folder:", os.getcwd())
 print("TOKEN =", TOKEN)
+print("All env keys:", list(os.environ.keys()))
+print("TOKEN exists:", "TOKEN" in os.environ)
